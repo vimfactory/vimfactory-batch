@@ -36,8 +36,8 @@ begin
     if( container.info['Created'] < expire_datetime )
       container_id = container.info['id'][0,12]
       del_container = Docker::Container.get(container_id)
-      #del_container.stop
-      #del_container.delete
+      del_container.stop
+      del_container.delete
   
       logger.info("Delete container(#{container_id}).")
     end
