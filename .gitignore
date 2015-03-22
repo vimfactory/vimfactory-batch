@@ -1,0 +1,5 @@
+*.swp
+/.bundle
+vendor/bundle
+logs/
+!.gitkeep
