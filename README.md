@@ -11,3 +11,11 @@ memcachedのデータと同時に消すことを考えたが、memcachedは全�
 ```
 bundle exec ruby del_container.rb [-s xxxx] [-H xxxx] [-P xxxx]
 ```
+
+## contabの設定
+ログは標準出力としてはかれるので、リダイレクトでキャッチする必要がある。
+以下はcrontabの例。
+
+```
+0 0 * * * cd /path/to && bundle exec ruby del_container.rb >> /path/to/logs/del_contaner.log
+```
