@@ -3,11 +3,13 @@ require 'docker'
 require 'optparse'
 
 args = {:expire_sec => '7200',
+        :vimrc_path => './', 
         :docker_host => 'localhost', 
         :docker_port => '4243',}
 
 OptionParser.new do |opt|
   opt.on('-s=SEC', '--expire-sec', 'default: 7200') { |v| args[:expire_sec] = v }
+  opt.on('-p=PATH', '--vimrc-path', 'default: current directory') { |v| args[:file_path] = v }
   opt.on('-H=HOST', '--docker-host', 'default: localhost') { |v| args[:docker_host] = v }
   opt.on('-P=PORT', '--docker-port', 'default: 4243') { |v| args[:docker_port] = v }
   opt.parse!(ARGV)
@@ -36,6 +38,11 @@ containers.each do |container|
     del_container = Docker::Container.get(container_id)
     del_container.stop
     del_container.delete
+    
+    # 対象コンテナのvimrcファイルがあれば削除
+    if File.exist?("#{args[:vimrc_path]}/vimrc_#{container_id}")
+      File.unlink("#{args[:vimrc_path]}/vimrc_#{container_id}")
+    end
 
     logger.info("Delete container(#{container_id}).")
   end
