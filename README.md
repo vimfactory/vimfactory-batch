@@ -7,11 +7,12 @@ memcachedにはキャッシュ期限をつけて削除、dockerコンテナは�
 オプションは３つ
 
 - -s x秒たったdockerコンテナを削除する(デフォルト7200)
+- -p vimrcファイルのあるパスを記載。-pオプションを指定した時のみファイルを削除する
 - -H dockerホスト(デフォルト localhost)
 - -P dockerポート(デフォルト 4243)
 
 ```
-bundle exec ruby del_container.rb [-s xxxx] [-H xxxx] [-P xxxx]
+bundle exec ruby del_container.rb [-s xxxx] [-p /path/to] [-H xxxx] [-P xxxx]
 ```
 
 ## contabの設定
