@@ -2,10 +2,10 @@ require 'logger'
 require 'docker'
 require 'optparse'
 
-args = {:expire_sec => '7200',
-        :vimrc_path => nil,
-        :docker_host => 'localhost', 
-        :docker_port => '4243',}
+args = { expire_sec: '7200',
+         vimrc_path: nil,
+         docker_host: 'localhost',
+         docker_port: '4243' }
 
 OptionParser.new do |opt|
   opt.on('-s=SEC', '--expire-sec', 'default: 7200') { |v| args[:expire_sec] = v }
@@ -15,40 +15,40 @@ OptionParser.new do |opt|
   opt.parse!(ARGV)
 end
 
-log_path = File.expand_path("../logs", __FILE__)
 logger = Logger.new(STDOUT)
 
-logger.info("Start")
+logger.info('Start')
 logger.info("Arguments: #{args}")
 
 if args[:expire_sec].to_i.zero?
-  logger.error("--expire-sec is not valid.")
+  logger.error('--expire-sec is not valid.')
   exit
 end
 
-
 Docker.url = "tcp://#{args[:docker_host]}:#{args[:docker_port]}"
-containers = Docker::Container.all(opts = {'all' => 1})
+#containers_opt = { all: true }
+#containers = Docker::Container.all(containers_opt)
+containers = Docker::Container.all(:all => true)
 
-expire_datetime = (Time.now-args[:expire_sec].to_i).to_i
+expire_datetime = (Time.now - args[:expire_sec].to_i).to_i
 
 containers.each do |container|
-  next if( container.info['Created'] > expire_datetime )
+  next if container.info['Created'] > expire_datetime
 
-  container_id = container.info['id'][0,12]
+  container_id = container.info['id'][0, 12]
   del_container = Docker::Container.get(container_id)
   del_container.stop
   del_container.delete
   logger.info("Delete container(#{container_id})")
-  
-  if !args[:vimrc_path].nil?
-    # 対象コンテナのvimrcファイルがあれば削除
-    file = "#{args[:vimrc_path]}/vimrc_#{container_id}"
-    if File.exist?(file)
-      File.unlink(file)
-      logger.info("Delete #{file}")
-    end
+
+  next if args[:vimrc_path].nil?
+
+  # 対象コンテナのvimrcファイルがあれば削除
+  file = "#{args[:vimrc_path]}/vimrc_#{container_id}"
+  if File.exist?(file)
+    File.unlink(file)
+    logger.info("Delete #{file}")
   end
 end
 
-logger.info("End")
+logger.info('End')
