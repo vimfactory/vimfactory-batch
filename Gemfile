@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'docker-api', '1.20.0', require: 'docker'
+gem 'docker-api', '1.23.0', require: 'docker'
 gem 'memcached', '1.8.0'
 
 group :development do
