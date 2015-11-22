@@ -26,9 +26,8 @@ if args[:expire_sec].to_i.zero?
 end
 
 Docker.url = "tcp://#{args[:docker_host]}:#{args[:docker_port]}"
-#containers_opt = { all: true }
-#containers = Docker::Container.all(containers_opt)
-containers = Docker::Container.all(:all => true)
+containers_opt = { all: true }
+containers = Docker::Container.all(containers_opt)
 
 expire_datetime = (Time.now - args[:expire_sec].to_i).to_i
 
