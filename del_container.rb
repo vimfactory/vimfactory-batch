@@ -43,7 +43,7 @@ containers.each do |container|
   next if args[:vimrc_path].nil?
 
   # 対象コンテナのvimrcファイルがあれば削除
-  file = "#{args[:vimrc_path]}/vimrc_#{container_id}"
+  file = "#{args[:vimrc_path]}/#{container_id}/vimrc"
   if File.exist?(file)
     File.unlink(file)
     logger.info("Delete #{file}")
